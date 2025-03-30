@@ -1,3 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Tailwind CSS engine */
+@import "tailwindcss";
+
+/* Define your theme variables */
+@theme {
+  --color-dark: #1E1E1E;
+  --color-darkGray: #333333;
+  --color-mediumGray: #555555;
+  --color-green: #4CAF50;
+  --color-white: #FFFFFF;
+  --color-red: #F44336;
+  
+  /* Optional semantic variables */
+  --color-primary: var(--color-green);
+  --color-danger: var(--color-red);
+}
+
+/* Optional base styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-white dark:bg-dark text-dark dark:text-white;
+  }
+}

@@ -13,16 +13,28 @@ const CoursePlan = ({ course, selectedLesson, setSelectedLesson }) => {
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
-        const response = await axios.get(`/api/courses/${course.id}`, {
-          headers: { Authorization: `Bearer ${currentUser.accessToken}` }
+        const response = await fetch(`/api/courses/${course.courseId}`, {
+          headers: {
+            'Authorization': `Bearer ${currentUser.accessToken}`,
+            'Content-Type': 'application/json' // Optional, but good practice
+          }
         });
 
-        if (response.data && response.data.units && Array.isArray(response.data.units)) {
-          setCourseData(response.data.units);
-        } else {
-          console.error("Invalid data format from API:", response.data);
-          setCourseData([]);
+        if (!response.ok) {
+          // Handle HTTP errors (e.g., 404, 500)
+          console.error(`HTTP error! status: ${response.status} for course ID: ${course.courseId}`);
+          return []; // Return empty array on HTTP error, or consider throwing error based on your error handling needs
         }
+    
+        const data = await response.json();
+        
+        if (data && data.units && Array.isArray(data.units)) {
+          return data.units; // Return the array of units if data is valid
+        } else {
+          console.error("Invalid data format from API for course ID:", course.courseId, data);
+          return []; // Return empty array for invalid data format
+        }
+
       } catch (error) {
         console.error("Error fetching course data:", error);
         setCourseData([]);

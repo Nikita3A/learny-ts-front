@@ -9,7 +9,6 @@ import Signup from "./pages/signup/signup";
 import ChatList from "./components/ChatList";
 import ChatWindow from "./components/ChatWindow";
 import CoursePlan from "./components/CoursePlan";
-// import ChatWindow from "./components/ChatWindow";
 
 const Layout = () => {
   return (
