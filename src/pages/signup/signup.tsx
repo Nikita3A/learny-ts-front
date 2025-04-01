@@ -15,7 +15,7 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-const handleSignup = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -24,16 +24,25 @@ const handleSignup = async (e) => {
     dispatch(loginStart());
     try {
       const response = await fetch('/api/auth/signup', {
-        body: JSON.stringify({ email: email, username: username, password: password }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, username, password }),
       });
-
-      dispatch(loginSuccess(response));
+  
+      // Wait for the response to be converted to JSON
+      const data = await response.json();
+      
+      // Dispatch the resolved, serializable data
+      dispatch(loginSuccess(data));
       navigate("/signin");
     } catch (err) {
-      console.log(err);
+      console.error(err);
       dispatch(loginFailed());
     }
   };
+  
   
   // <div className="h-screen flex items-center justify-center bg-dark">
   // <div className="bg-darkGray border-0 sm:border-mediumGray sm:border-2 p-4 sm:p-8 sm:rounded-2xl shadow-md w-full h-full sm:h-auto max-w-md flex flex-col justify-start">
