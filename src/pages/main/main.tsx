@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
-import ChatList from '../../components/ChatList';
-import CourseList from '../../components/CourseList';
+import ChatList from '../../components/Chats/ChatList';
+import CourseList from '../../components/Courses/CourseList';
 import AddUserModal from '../../components/AddUserModal';
 import AddChatModal from '../../components/AddChatModal';
-import ChatWindow from '../../components/ChatWindow';
+import ChatWindow from '../../components/Chats/ChatWindow';
 import Profile from '../../components/Profile';
-import CoursePlan from '../../components/CoursePlan';
+import CoursePlan from '../../components/Courses/CoursePlan';
 import CreateCourse from '../../components/CreateCourse';
 import io from 'socket.io-client';
 import axios from "axios";

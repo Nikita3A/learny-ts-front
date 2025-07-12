@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
-import LessonContent from './LessonContent';
-import Test from './Test';
+import LessonContent from '../LessonContent';
+// import Test from '../Test';
 
 const CoursePlan = ({ course, selectedLesson, setSelectedLesson }) => {
   const { currentUser } = useSelector((state) => state.user);

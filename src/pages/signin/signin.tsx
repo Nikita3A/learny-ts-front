@@ -33,7 +33,7 @@ const Signin = () => {
       dispatch(loginSuccess({user, accessToken, refreshToken}))
 
 
-      navigate("/");
+      navigate("/courses");
 
     } catch (err) {
       console.log('e:', err);
@@ -74,6 +74,7 @@ const Signin = () => {
                 Signin with Google
               </button>
             </div>
+            <a className="text-center text-green text-decoration-line: underline" href="/">Don't have an account?</a>
           </form>
         </div>
       </div>

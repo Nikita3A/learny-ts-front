@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../src/scrollbar.css'; // Adjust the path according to your project structure
+import '../../scrollbar.css'; // Adjust the path according to your project structure
 
 const ChatList = ({ chats, onAddChat, onChatSelect }) => {
   return (

@@ -1,14 +1,14 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 
 import "./App.css";
-import CourseList from "./components/CourseList";
+import CourseList from "./components/Courses/CourseList";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import Signin from "./pages/signin/signin";
 import Signup from "./pages/signup/signup";
-import ChatList from "./components/ChatList";
-import ChatWindow from "./components/ChatWindow";
-import CoursePlan from "./components/CoursePlan";
+import ChatList from "./components/Chats/ChatList";
+import ChatWindow from "./components/Chats/ChatWindow";
+import CoursePlan from "./components/Courses/CoursePlan";
 
 const Layout = () => {
   return (
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         element: <Signin />,
       },
       {
-        path: "/signup",
+        path: "/",
         element: <Signup />,
       },
       {

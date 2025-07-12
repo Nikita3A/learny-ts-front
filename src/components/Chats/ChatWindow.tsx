@@ -1,5 +1,5 @@
 import React from 'react';
-import InputWithButton from './InputWithButton';
+import InputWithButton from '../InputWithButton';
 
 const ChatWindow = ({ chat, messages, addUser, onSubmitMessage, currentUserId, currentUser }) => { // Add currentUser prop
 

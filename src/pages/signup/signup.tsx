@@ -89,6 +89,7 @@ const Signup = () => {
                 Signup with Google
               </button>
             </div>
+            <a className="text-center text-green text-decoration-line: underline" href="/signin">Do you already have an account?</a>
           </form>
         </div>
       </div>
