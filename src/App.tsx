@@ -19,9 +19,12 @@ const Layout = () => {
 };
 
 const SharedLayout = () => {
+  // const navigate = useNavigate();
   return (
     <div className="flex flex-col h-screen">
-      <Navbar onHomeClick={undefined} onMessagesClick={undefined} onProfileClick={undefined} onAiClick={undefined} streakDays={undefined} />
+      {/* <Navbar onHomeClick={navigate("/courses")} onMessagesClick={navigate("/chats")} onProfileClick={undefined} onAiClick={undefined} streakDays={undefined} /> */}
+      <Navbar streakDays={undefined} />
+
       <div className="flex flex-1">
         {/* <Sidebar /> */}
         <div className="flex-1">
@@ -55,7 +58,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ChatList chats={undefined} onAddChat={undefined} onChatSelect={undefined} />, // List of chats
+                element: <ChatList/>, // List of chats
               },
               {
                 path: ":chatId",

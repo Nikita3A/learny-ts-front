@@ -1,6 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+export interface User {
+  accessToken: string;
+  refreshToken?: string;
+  user: {
+    id: string;
+    username?: string;
+    // add other user fields as needed
+  };
+  profilePicture?: string;
+  following?: string[];
+}
+
+export interface UserState {
+  currentUser: User | null;
+  isLoading: boolean;
+  error: boolean;
+}
+
+const initialState: UserState = {
   currentUser: null,
   isLoading: false,
   error: false,
@@ -18,8 +36,10 @@ export const userSlice = createSlice({
       state.currentUser = action.payload;
     },
     updateTokens: (state, action) => {
-      state.currentUser.accessToken = action.payload.accessToken;
-      state.currentUser.refreshToken = action.payload.refreshToken;
+      if (state.currentUser) {
+        state.currentUser.accessToken = action.payload.accessToken;
+        state.currentUser.refreshToken = action.payload.refreshToken;
+      }
     },
     loginFailed: (state) => {
       state.isLoading = false;
@@ -29,22 +49,28 @@ export const userSlice = createSlice({
       return initialState;
     },
     changeProfile: (state, action) => {
-      state.currentUser.profilePicture = action.payload;
-    },
-    following: (state, action) => {
-      if (state.currentUser.following.includes(action.payload)) {
-        state.currentUser.following.splice(
-          state.currentUser.following.findIndex(
-            (followingId) => followingId === action.payload
-          )
-        );
-      } else {
-        state.currentUser.following.push(action.payload);
+      if (state.currentUser) {
+        state.currentUser.profilePicture = action.payload;
       }
     },
-    // New Action for Updating Username
+    following: (state, action) => {
+      if (state.currentUser && state.currentUser.following) {
+        if (state.currentUser.following.includes(action.payload)) {
+          state.currentUser.following.splice(
+            state.currentUser.following.findIndex(
+              (followingId) => followingId === action.payload
+            ),
+            1
+          );
+        } else {
+          state.currentUser.following.push(action.payload);
+        }
+      }
+    },
     updateUsername: (state, action) => {
-      state.currentUser.user.username = action.payload;
+      if (state.currentUser && state.currentUser.user) {
+        state.currentUser.user.username = action.payload;
+      }
     },
   },
 });
@@ -57,7 +83,7 @@ export const {
   changeProfile,
   following,
   updateTokens,
-  updateUsername, // Export the new action
+  updateUsername,
 } = userSlice.actions;
 
 export default userSlice.reducer;

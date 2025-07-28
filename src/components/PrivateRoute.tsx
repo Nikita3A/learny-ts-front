@@ -24,7 +24,19 @@ const PrivateRoute = () => {
   useEffect(() => {
     const checkAuth = async () => {
       if (!hasRequested && (!currentUser || !currentUser.accessToken || isTokenExpired(currentUser.accessToken))) {
-        const res = await axios.post("/api/auth/refresh", {}, { headers: { 'Authorization': `Bearer ${currentUser.refreshToken}` }} );
+        const res = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentUser.refreshToken}`,
+          },
+          body: JSON.stringify({}), // empty object as in axios call
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to refresh token');
+        }
+
         if (res.data && res.data.accessToken) {
           // Dispatch the loginSuccess action to update the accessToken in the Redux store
           dispatch(updateTokens({accessToken: res.data.accessToken, refreshToken: currentUser.refreshToken}));

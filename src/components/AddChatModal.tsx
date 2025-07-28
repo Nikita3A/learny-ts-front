@@ -1,34 +1,44 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
-const AddChatModal = ({ isOpen, onRequestClose, setChats }) => {
+interface AddChatModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  refreshChats: () => Promise<void>;
+}
+
+const AddChatModal: React.FC<AddChatModalProps> = ({ isOpen, onRequestClose, refreshChats }) => {
   const [chatName, setChatName] = useState('');
-  const currentUser = useSelector(state => state.user.currentUser);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
-  const handleAddChat = async (event) => {
+  const handleAddChat = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
-    try {      
-      const response = await axios.post('/api/chats', {
-        id: currentUser.user.id, // Use the user ID from the Redux store
-        name: chatName,
+    if (!chatName.trim()) return;
+    setIsSubmitting(true);
+    try {
+      const body = JSON.stringify({
+        id: currentUser.user.id,
+        name: chatName
       });
-  
-      // Close the modal
+      const response = await fetch('/api/chats', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${currentUser.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body
+      });
+      if (!response.ok) throw new Error('Failed to create. Server response: ' + JSON.stringify(response));
+      setChatName('');
       onRequestClose();
-  
-      // Refresh the chat list
-      const chatResponse = await axios.get(`/api/users/${currentUser.user.id}/chats`);
-      setChats(chatResponse.data);
-    } catch (error) {
-      console.error("Error adding chat: ", error);
+      if (refreshChats) await refreshChats();
+    } finally {
+      setIsSubmitting(false);
     }
-  
-    setChatName('');
   };
-  
 
   return (
     <Modal
@@ -36,7 +46,7 @@ const AddChatModal = ({ isOpen, onRequestClose, setChats }) => {
       onRequestClose={onRequestClose}
       contentLabel="Add Chat"
       className="flex items-center justify-center min-h-screen px-4 py-12 bg-secondaryBackgroundDark"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      overlayClassName="custom-modal-overlay"
     >
       <div className="w-full max-w-md p-8 space-y-4 bg-darkGray rounded-lg relative">
         <h2 className="text-2xl font-extrabold text-white">Add Chat</h2>
@@ -57,8 +67,9 @@ const AddChatModal = ({ isOpen, onRequestClose, setChats }) => {
           <button
             type="submit"
             className="w-full mt-4 text-white bg-green p-2 rounded"
+            disabled={isSubmitting}
           >
-            Add
+            {isSubmitting ? 'Adding...' : 'Add'}
           </button>
         </form>
       </div>

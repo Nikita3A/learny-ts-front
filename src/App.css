@@ -24,3 +24,10 @@
     @apply bg-white dark:bg-dark text-dark dark:text-white;
   }
 }
+
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6) !important;
+  z-index: 50;
+}
