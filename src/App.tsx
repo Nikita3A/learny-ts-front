@@ -1,87 +1,32 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
-
-import "./App.css";
-import CourseList from "./components/Courses/CourseList";
-import Navbar from "./components/Navbar";
-import PrivateRoute from "./components/PrivateRoute";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ChatsPage from './pages/ChatsPage';
+import CoursesPage from './pages/CoursesPage';
+import ProfilePage from './pages/ProfilePage';
+import AIChatPage from './pages/AIChatPage';
+import SharedLayout from './pages/SharedLayout';
 import Signin from "./pages/signin/signin";
 import Signup from "./pages/signup/signup";
-import ChatList from "./components/Chats/ChatList";
-import ChatWindow from "./components/Chats/ChatWindow";
-import CoursePlan from "./components/Courses/CoursePlan";
-
-const Layout = () => {
-  return (
-    <div className="">
-      <Outlet></Outlet>
-    </div>
-  );
-};
-
-const SharedLayout = () => {
-  // const navigate = useNavigate();
-  return (
-    <div className="flex flex-col h-screen">
-      {/* <Navbar onHomeClick={navigate("/courses")} onMessagesClick={navigate("/chats")} onProfileClick={undefined} onAiClick={undefined} streakDays={undefined} /> */}
-      <Navbar streakDays={undefined} />
-
-      <div className="flex flex-1">
-        {/* <Sidebar /> */}
-        <div className="flex-1">
-          <Outlet />
-        </div>
-      </div>
-    </div>
-  );
-};
+import PrivateRoute from "./components/PrivateRoute";
+import './App.css';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <SharedLayout />,
     children: [
-      {
-        path: "/signin",
-        element: <Signin />,
+      { 
+        path: "chats", 
+        element: <ChatsPage />,
       },
-      {
-        path: "/",
-        element: <Signup />,
+      { 
+        path: "chats/:chatId", 
+        element: <ChatsPage />, // Use the same page for both
       },
-      {
-        path: "/",
-        element: <PrivateRoute />,
-        children: [
-          {
-            path: "/chats",
-            element: <SharedLayout />,
-            children: [
-              {
-                path: "",
-                element: <ChatList/>, // List of chats
-              },
-              {
-                path: ":chatId",
-                element: <ChatWindow chat={undefined} messages={undefined} addUser={undefined} onSubmitMessage={undefined} currentUserId={undefined} currentUser={undefined} />, // Individual chat content
-              },
-            ],
-          },
-          {
-            path: "/courses",
-            element: <SharedLayout />,
-            children: [
-              {
-                path: "",
-                element: <CourseList courses={undefined} onAddCourse={undefined} onCourseSelect={undefined} />, // List of courses
-              },
-              {
-                path: ":courseId",
-                element: <CoursePlan course={undefined} selectedLesson={undefined} setSelectedLesson={undefined} />, // Individual course content
-              },
-            ],
-          },
-        ],
-      },
+      { path: "courses", element: <CoursesPage /> },
+      { path: "profile", element: <ProfilePage /> },
+      { path: "ai", element: <AIChatPage /> },
+      { path: "signin", element: <Signin /> },
+      { path: "signup", element: <Signup /> },
     ],
   },
 ]);
@@ -89,7 +34,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="bg-secondaryBackgroundLight dark:bg-secondaryBackgroundDark">
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router} />
     </div>
   );
 }

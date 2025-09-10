@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const AddUserModal = ({ isOpen, onRequestClose, chat }) => {
@@ -9,14 +8,22 @@ const AddUserModal = ({ isOpen, onRequestClose, chat }) => {
 
   const handleAddUserToChat = async (event) => {
     event.preventDefault();
-    
     try {
-      const user = await axios.get(`/api/users/${userName}`);
+      // Fetch user by username
+      const userResponse = await fetch(`/api/users/${userName}`);
+      if (!userResponse.ok) throw new Error('User not found');
+      const user = await userResponse.json();
 
-      console.log('ui: ', user.data.id);
+      console.log('ui: ', user.id);
       console.log('chat: ', chat.id);
-      await axios.put(`/api/chats/${chat.id}/users/${user.data.id}`);
-  
+      // Add user to chat
+      const addUserResponse = await fetch(`/api/chats/${chat.id}/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!addUserResponse.ok) throw new Error('Failed to add user to chat');
       // Close the modal
       onRequestClose();
     } catch (error) {

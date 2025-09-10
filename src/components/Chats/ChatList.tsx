@@ -1,9 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import AddChatModal from '../AddChatModal';
-import { RootState } from '../../redux/store';
 
-import '../../scrollbar.css'; // Adjust the path according to your project structure
+import '../../scrollbar.css';
 
 interface Chat {
   id: string;
@@ -12,60 +8,23 @@ interface Chat {
   lastMessage?: string;
 }
 
-const ChatList = () => {
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Modal state
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+interface ChatListProps {
+  chats: Chat[];
+  onChatSelect: (chat: Chat) => void;
+  onAddChat: () => void;
+}
 
-  // Open modal
-  const onAddChat = () => {
-    setIsAddModalOpen(true);
-  };
 
-  // Close modal
-  const handleCloseModal = () => {
-    setIsAddModalOpen(false);
-  };
-
-  // Refresh chats after adding
-  const refreshChats = useCallback(async () => {
-    if (!currentUser?.accessToken) return;
-    try {
-      const userId = currentUser.user.id;
-      const response = await fetch(`/api/users/${userId}/chats`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${currentUser.accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (response.ok) {
-        const serverChats = await response.json();
-        setChats(serverChats);
-      }
-    } catch {
-      // Optionally handle error
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
-    refreshChats();
-  }, [currentUser, refreshChats]); // Re-fetch if the user context or refreshChats changes
-
+const ChatList: React.FC<ChatListProps> = ({ chats, onChatSelect, onAddChat }) => {
   return (
     <div className="flex flex-col h-full">
-      {/* AddChatModal for creating new chat */}
-      <AddChatModal
-        isOpen={isAddModalOpen}
-        onRequestClose={handleCloseModal}
-        refreshChats={refreshChats}
-      />
       {/* Scrollable chat list */}
       <div className="flex-grow overflow-y-auto px-4 py-2 space-y-2 scrollbar-hidden">
         {chats.map((chat) => (
           <div
             key={chat.id}
-            className="flex items-center bg-darkGray rounded-lg p-2 text-white"
+            className="flex items-center bg-darkGray rounded-lg p-2 text-white cursor-pointer"
+            onClick={() => onChatSelect(chat)}
           >
             <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center">
               {chat.picture && (
