@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ChatList from '../components/Chats/ChatList';
 import ChatWindow from '../components/Chats/ChatWindow';
@@ -12,52 +12,83 @@ import { RootState } from '../redux/store';
 const ChatsPage = () => {
   const { chatList, isAddChatModalOpen, setIsAddChatModalOpen } = useChats();
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [showChatList, setShowChatList] = useState(true);
   const navigate = useNavigate();
   const { chatId } = useParams();
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const currentUserId = currentUser?.user?.id;
 
-  // Find the selected chat by ID from the URL
-  const selectedChat = chatList.find((chat: any) => String(chat.id) === String(chatId));
+  // Check if the screen is mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Reset showChatList when navigating to /chats without a chatId
+  useEffect(() => {
+    if (!chatId) {
+      setShowChatList(true);
+    }
+  }, [chatId]);
+
+  const selectedChat = chatList.find((chat) => String(chat.id) === String(chatId));
   const { messageList, handleSendMessage } = useChatSocket(selectedChat);
 
-  // Handle chat selection: update URL
-  const handleChatSelect = (chat: any) => {
+  const handleChatSelect = (chat) => {
+    if (isMobileView) {
+      setShowChatList(false); // Hide chat list on mobile when a chat is selected
+    }
     navigate(`/chats/${chat.id}`);
   };
 
-  // Refresh chats for AddChatModal
+  const handleBackToChatList = () => {
+    setShowChatList(true); // Show chat list again on mobile
+    navigate('/chats');
+  };
+
   const refreshChats = useCallback(async () => {
-    // You may want to refetch chats here, for now reload page
     window.location.reload();
   }, []);
 
-  // Open AddUserModal from ChatWindow's addUser
   const handleAddUser = () => {
     setIsAddUserModalOpen(true);
   };
-  console.log('Chat ID:', chatId);
-  console.log('Chat List:', chatList);
 
   return (
     <div className="flex h-full">
-      <ChatList chats={chatList} onChatSelect={handleChatSelect} onAddChat={() => setIsAddChatModalOpen(true)} />
-      <div className="flex-grow">
-        {chatId && selectedChat ? (
-          <ChatWindow
-            chat={selectedChat}
-            messages={messageList}
-            addUser={handleAddUser}
-            onSubmitMessage={handleSendMessage}
-            currentUserId={currentUserId}
-            currentUser={currentUser}
+      {(showChatList || !isMobileView) && (
+        <div className={isMobileView ? 'w-full' : 'w-1/6'}>
+          <ChatList
+            chats={chatList}
+            onChatSelect={handleChatSelect}
+            onAddChat={() => setIsAddChatModalOpen(true)}
           />
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-400">
-            Select a chat to view messages.
-          </div>
-        )}
-      </div>
+        </div>
+      )}
+      {!isMobileView || !showChatList ? (
+        <div className={isMobileView ? 'w-full' : 'flex-grow'}>
+          {chatId && selectedChat ? (
+            <ChatWindow
+              chat={selectedChat}
+              messages={messageList}
+              addUser={handleAddUser}
+              onSubmitMessage={handleSendMessage}
+              currentUserId={currentUserId}
+              currentUser={currentUser}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-gray-400">
+              Select a chat to view messages.
+            </div>
+          )}
+        </div>
+      ) : null}
       <AddChatModal isOpen={isAddChatModalOpen} onRequestClose={() => setIsAddChatModalOpen(false)} refreshChats={refreshChats} />
       <AddUserModal isOpen={isAddUserModalOpen} onRequestClose={() => setIsAddUserModalOpen(false)} chat={selectedChat} />
     </div>

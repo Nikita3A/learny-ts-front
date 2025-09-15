@@ -17,7 +17,7 @@ interface ChatListProps {
 
 const ChatList: React.FC<ChatListProps> = ({ chats, onChatSelect, onAddChat }) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {/* Scrollable chat list */}
       <div className="flex-grow overflow-y-auto px-4 py-2 space-y-2 scrollbar-hidden">
         {chats.map((chat) => (
