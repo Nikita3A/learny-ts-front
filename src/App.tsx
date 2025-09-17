@@ -3,7 +3,7 @@ import ChatsPage from './pages/ChatsPage';
 import CoursesPage from './pages/CoursesPage';
 import ProfilePage from './pages/ProfilePage';
 import AIChatPage from './pages/AIChatPage';
-import SharedLayout from './pages/SharedLayout';
+import SharedLayout from './components/SharedLayout';
 import Signin from "./pages/signin/signin";
 import Signup from "./pages/signup/signup";
 import PrivateRoute from "./components/PrivateRoute";
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
         element: <ChatsPage />, // Use the same page for both
       },
       { path: "courses", element: <CoursesPage /> },
+      // { path: "courses/:courseId", element: <CoursesPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "ai", element: <AIChatPage /> },
       { path: "signin", element: <Signin /> },

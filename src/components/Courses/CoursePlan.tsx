@@ -132,8 +132,6 @@ const CoursePlan = ({ course, selectedLesson, setSelectedLesson }) => {
     setIsTakingTest(false);
   };
 
-  // console.log("Course Data Before Render:", courseData);
-
   return (
     <div className="p-0 sm:p-5 bg-darkGray h-full w-full rounded-2xl flex flex-col">
       {isTakingTest ? (
