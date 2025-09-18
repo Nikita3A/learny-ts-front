@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 
 const CreateCourse = ({hideForm, loadCoursesList}) => {
   const [language, setLanguage] = useState("");
@@ -24,13 +23,14 @@ const CreateCourse = ({hideForm, loadCoursesList}) => {
 
     try {
       // Make the POST request to create a new course
-      const response = await axios.post("/api/courses/", courseData, {
-        headers: {
-          Authorization: `Bearer ${currentUser.accessToken}`, // Include access token in headers
-        },
-      });
+      // const response = await axios.post("/api/courses/", courseData, {
+      //   headers: {
+      //     Authorization: `Bearer ${currentUser.accessToken}`, // Include access token in headers
+      //   },
+      // });
+      const response = {};
 
-      console.log("Course created successfully:", response.data);
+      console.log("Course created successfully:", response);
 
       // Clear form inputs after successful submission
       setLanguage("");

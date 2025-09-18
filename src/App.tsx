@@ -8,6 +8,7 @@ import Signin from "./pages/signin/signin";
 import Signup from "./pages/signup/signup";
 import PrivateRoute from "./components/PrivateRoute";
 import './App.css';
+import CourseCreationPage from "./pages/CourseCreationPage";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       { 
         path: "chats/:chatId", 
         element: <ChatsPage />, // Use the same page for both
+      },
+      {
+        path: "courses/create",
+        element: <CourseCreationPage />
       },
       { path: "courses", element: <CoursesPage /> },
       // { path: "courses/:courseId", element: <CoursesPage /> },

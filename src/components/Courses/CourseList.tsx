@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../scrollbar.css';
+import { Link } from 'react-router';
 
 const CourseList = ({ courses, onAddCourse, onCourseSelect }) => {
   return (
@@ -34,12 +35,12 @@ const CourseList = ({ courses, onAddCourse, onCourseSelect }) => {
 
       {/* Sticky Add Course button - takes only the space it needs */}
       <div className="px-4 py-2 bg-dark shrink-0">
-        <button
+        <Link
+          to="/courses/create"
           className="w-full flex items-center justify-center bg-green text-white text-lg font-semibold rounded-lg py-2 border border-mediumGray hover:bg-green-dark transition-colors duration-150"
-          onClick={onAddCourse}
         >
           Add Course
-        </button>
+        </Link>
       </div>
     </div>
   );
