@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CourseList from '../components/Courses//CourseList';
+import CourseList from '../components/Courses/CourseList';
 import CoursePlan from '../components/Courses/CoursePlan';
 import { useSelector } from 'react-redux';
 import useCourses from '../hooks/useCourses';
@@ -12,6 +12,9 @@ const CoursesPage = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const currentUser = useSelector((state) => state.user.currentUser);
+
+  // Use the useCourses hook to fetch real data
+  const { courses, isLoading, error } = useCourses(currentUser?.accessToken);
 
   // Mobile view detection
   useEffect(() => {
@@ -30,22 +33,7 @@ const CoursesPage = () => {
     }
   }, [courseId]);
 
-  // Placeholder data
-  const isLoading = false;
-  const error = null;
-  const courses = [
-    { id: 1, name: 'Sample Course', progress: '50%' },
-    { id: 2, name: 'Another Course', progress: '30%' },
-    { id: 3, name: 'Very Long Course Name That Might Take Multiple Lines', progress: '70%' },
-    { id: 4, name: 'Another Sample', progress: '40%' },
-    { id: 5, name: 'Yet Another Course', progress: '60%' },
-    { id: 6, name: 'Final Course', progress: '80%' },
-    { id: 7, name: 'Extra Course', progress: '20%' },
-    { id: 8, name: 'Additional Course', progress: '90%' },
-    { id: 8, name: 'Additional Course', progress: '90%' },
-    { id: 8, name: 'Additional Course', progress: '90%' },
-    { id: 8, name: 'Additional Course', progress: '90%' },
-  ];
+  // Find the selected course from the fetched data
   const selectedCourse = courses.find((course) => String(course.id) === courseId);
 
   const handleCourseSelect = (course) => {
@@ -106,8 +94,8 @@ const CoursesPage = () => {
           {courseId && selectedCourse ? (
             <div className="h-full overflow-y-auto">
               <CoursePlan
-                course={selectedCourse}
-                onBack={isMobileView ? handleBackToCourseList : undefined}
+                courseId={selectedCourse.id}
+                // onBack={isMobileView ? handleBackToCourseList : undefined}
               />
             </div>
           ) : (

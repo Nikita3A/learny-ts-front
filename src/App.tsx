@@ -27,7 +27,17 @@ const router = createBrowserRouter([
         path: "courses/create",
         element: <CourseCreationPage />
       },
-      { path: "courses", element: <CoursesPage /> },
+      {
+        path: "courses",
+        element: <CoursesPage />,
+        children: [  // Add nested route for course details
+          {
+            path: ":courseId",  // This matches the courseId in the URL
+            element: null  // We'll handle this differently
+          }
+        ]
+      },
+      // { path: "courses", element: <CoursesPage /> },
       // { path: "courses/:courseId", element: <CoursesPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "ai", element: <AIChatPage /> },
