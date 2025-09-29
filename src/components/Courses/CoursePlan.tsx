@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import LessonContent from '../LessonContent';
+import LessonContent from '../Lessons/LessonContent';
 import { useCoursePlan } from '../../hooks/useCoursePlan';
 // import Test from '../Test';
 
@@ -9,6 +10,7 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [isTakingTest, setIsTakingTest] = useState(false);
   const [testData, setTestData] = useState([]);
+  const navigate = useNavigate();
 
   const { courseData, isLoading, error } = useCoursePlan({
     courseId,
@@ -25,8 +27,9 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
     setSelectedLesson(null);
   };
 
-  const handleLessonClick = (lesson) => {
-    setSelectedLesson(lesson);
+  const handleLessonClick = (unitId, lesson) => {
+    navigate(`/courses/${unitId}/lessons/${lesson.id}`);
+    // setSelectedLesson(lesson);
   };
 
   // ... rest of your methods (handleTestClick, handleTestFinish) ...
@@ -80,7 +83,7 @@ return (
                             <div
                               key={lessonIndex}
                               className={`flex items-center p-2 rounded-md ${lessonIndex === section.lessons.length - 1 ? '' : 'mb-2'} hover:bg-mediumGray transition-colors duration-200`}
-                              onClick={() => handleLessonClick(lesson)}
+                              onClick={() => handleLessonClick(section.id, lesson)}
                             >
                               <p className={`text-md flex-1 cursor-pointer ${lesson.finished ? 'text-green' : 'text-white'}`}>
                                 {lesson.title}

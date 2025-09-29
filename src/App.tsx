@@ -9,6 +9,7 @@ import Signup from "./pages/signup/signup";
 import PrivateRoute from "./components/PrivateRoute";
 import './App.css';
 import CourseCreationPage from "./pages/CourseCreationPage";
+import LessonPage from "./pages/LessonPage";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             element: null  // We'll handle this differently
           }
         ]
+      },
+      {
+        path: "courses/:courseId/lessons/:lessonId",
+        element: <LessonPage />
       },
       // { path: "courses", element: <CoursesPage /> },
       // { path: "courses/:courseId", element: <CoursesPage /> },
