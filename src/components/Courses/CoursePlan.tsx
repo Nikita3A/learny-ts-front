@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import LessonContent from '../Lessons/LessonContent';
@@ -17,13 +17,43 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
     accessToken: currentUser?.accessToken
   });
 
+  // compute deterministic ordering once per render (useMemo)
+  const orderedCourseData = useMemo(() => {
+    if (!Array.isArray(courseData)) return [];
+    // shallow copy units and lessons to avoid mutating original
+    const units = courseData.map(u => ({
+      ...u,
+      lessons: Array.isArray(u.lessons) ? u.lessons.slice() : []
+    }));
+
+    // sort lessons by position then id (fallback)
+    units.forEach(u => {
+      u.lessons.sort((a, b) => {
+        const pa = Number(a.position ?? a.id ?? 0);
+        const pb = Number(b.position ?? b.id ?? 0);
+        if (pa !== pb) return pa - pb;
+        return Number(a.id ?? 0) - Number(b.id ?? 0);
+      });
+    });
+
+    // sort units by position then id (fallback)
+    units.sort((a, b) => {
+      const pa = Number(a.position ?? a.id ?? 0);
+      const pb = Number(b.position ?? b.id ?? 0);
+      if (pa !== pb) return pa - pb;
+      return Number(a.id ?? 0) - Number(b.id ?? 0);
+    });
+
+    return units;
+  }, [courseData]);
+
   const onAddUnit = () => {
     // Logic to add a new unit
     console.log('Add Unit clicked');
   }
 
-  const toggleSection = (index) => {
-    setExpandedSection(expandedSection === index ? null : index);
+  const toggleSection = (sectionId) => {
+    setExpandedSection(expandedSection === sectionId ? null : sectionId);
     setSelectedLesson(null);
   };
 
@@ -34,7 +64,7 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
 
   // ... rest of your methods (handleTestClick, handleTestFinish) ...
 
-return (
+  return (
     <div className="flex flex-col h-full bg-dark">
       <div className="flex-grow overflow-y-auto px-4 py-2 space-y-2 scrollbar-hidden">
         {/* Course header */}
@@ -56,19 +86,19 @@ return (
               {selectedLesson ? (
                 <div className="bg-darkGray rounded-lg p-4">
                   <LessonContent
-                    unitId={courseData.find(unit =>
+                    unitId={orderedCourseData.find(unit =>
                       unit.lessons?.some(lesson => lesson.id === selectedLesson.id)
                     )?.id}
                     lessonData={selectedLesson}
                   />
                 </div>
               ) : (
-                courseData.length > 0 ? (
-                  courseData.map((section, index) => (
-                    <div key={index} className="course-section mb-2 text-white">
+                orderedCourseData.length > 0 ? (
+                  orderedCourseData.map((section) => (
+                    <div key={section.id} className="course-section mb-2 text-white">
                       <div
                         className="cursor-pointer flex items-center justify-between py-3 px-4 bg-dark rounded-lg hover:bg-mediumGray transition-colors duration-200"
-                        onClick={() => toggleSection(index)}
+                        onClick={() => toggleSection(section.id)}
                       >
                         <h3 className={`font-bold text-lg ${section.completed ? 'text-green' : 'text-white'}`}>
                           {section.title}
@@ -77,11 +107,12 @@ return (
                           {section.lessons?.length || 0} lessons
                         </span>
                       </div>
-                      {expandedSection === index && section.lessons?.length > 0 && (
+
+                      {expandedSection === section.id && section.lessons?.length > 0 && (
                         <div className="section-content mt-1 text-white bg-dark p-4 rounded-lg">
                           {section.lessons.map((lesson, lessonIndex) => (
                             <div
-                              key={lessonIndex}
+                              key={lesson.id}
                               className={`flex items-center p-2 rounded-md ${lessonIndex === section.lessons.length - 1 ? '' : 'mb-2'} hover:bg-mediumGray transition-colors duration-200`}
                               onClick={() => handleLessonClick(section.id, lesson)}
                             >
@@ -105,16 +136,11 @@ return (
                           ))}
                         </div>
                       )}
-                      {expandedSection === index && (!section.lessons || section.lessons.length === 0) && (
-                        <div className="section-content mt-1 text-white bg-dark p-4 rounded-lg">
-                          <p>No lessons in this section.</p>
-                        </div>
-                      )}
                     </div>
                   ))
                 ) : (
                   <div className="text-center text-gray-400 py-8">
-                    {courseData.length === 0 && courseId ? (
+                    {orderedCourseData.length === 0 && courseId ? (
                       <div>
                         <p className="mb-4">Loading course data...</p>
                         <button

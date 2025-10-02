@@ -9,6 +9,7 @@ const CoursesPage = () => {
   const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [showCourseList, setShowCourseList] = useState(true);
+  const [selectedLesson, setSelectedLesson] = useState(null);
   const navigate = useNavigate();
   const { courseId } = useParams();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -95,7 +96,8 @@ const CoursesPage = () => {
             <div className="h-full overflow-y-auto">
               <CoursePlan
                 courseId={selectedCourse.id}
-                // onBack={isMobileView ? handleBackToCourseList : undefined}
+                selectedLesson={selectedLesson}
+                setSelectedLesson={setSelectedLesson}
               />
             </div>
           ) : (
