@@ -19,7 +19,6 @@ const Test = ({ testData, handleTestFinish }) => {
 
   const renderQuestionComponent = () => {
     if (!currentQuestion) return <p>Loading...</p>;
-    console.log('cure: ', currentQuestion);
     
     switch (currentQuestion.type) {
       case "single":

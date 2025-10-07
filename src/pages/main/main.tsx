@@ -209,9 +209,6 @@ const App = () => {
   };
 
   const handleCourseSelect = (course) => {
-    // console.log('unit: ', selectedUnit);
-    // console.log('Selected course: ', course);
-    
     setSelectedCourse(course);
     setSelectedUnit(null);
     setActiveChat(null); // Deselect chat when a course is selected
@@ -274,9 +271,7 @@ const App = () => {
   }
 
   const handleUnitSelect = (unit) => {
-    console.log('haha');
     setSelectedUnit(unit);
-    console.log('Hunit: ', selectedUnit);
     setIsSidebarOpen(false);
   };
   

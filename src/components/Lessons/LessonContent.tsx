@@ -10,8 +10,6 @@ interface LessonContentProps {
 }
 
 const LessonContent = ({ unitId, lessonId }: LessonContentProps) => {
-  console.log('Rendering LessonContent for unitId:', unitId, 'lessonId:', lessonId);
-
   const { currentUser } = useSelector((state) => state.user);
 
   // call hook once, keep full result for logging and map `content` -> `lessonContent`
@@ -29,9 +27,6 @@ const LessonContent = ({ unitId, lessonId }: LessonContentProps) => {
     error,
     generateContent
   } = hookResult;
-
-  console.log('lessonContent rawdata:', hookResult);
-  console.log('LessonContent hook data:', { lessonData, isLoading, isGenerating, error });
 
   return (
     <ErrorBoundary fallback={<div>Error loading lesson content</div>}>

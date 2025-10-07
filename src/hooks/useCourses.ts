@@ -7,8 +7,7 @@ interface Course {
 }
 
 const useCourses = (accessToken: string | undefined) => {
-  console.log('hehe: ');
-    const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,10 +31,7 @@ const useCourses = (accessToken: string | undefined) => {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
-        });
-
-        console.log('hehe: ', response);
-        
+        });        
 
         if (!response.ok) {
           throw new Error(`Failed to fetch courses: ${response.status}`);

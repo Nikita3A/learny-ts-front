@@ -58,7 +58,7 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
   };
 
   const handleLessonClick = (unitId, lesson) => {
-    navigate(`/courses/${unitId}/lessons/${lesson.id}`);
+    navigate(`/unit/${unitId}/lessons/${lesson.id}`);
     // setSelectedLesson(lesson);
   };
 

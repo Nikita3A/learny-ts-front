@@ -14,8 +14,6 @@ const AddUserModal = ({ isOpen, onRequestClose, chat }) => {
       if (!userResponse.ok) throw new Error('User not found');
       const user = await userResponse.json();
 
-      console.log('ui: ', user.id);
-      console.log('chat: ', chat.id);
       // Add user to chat
       const addUserResponse = await fetch(`/api/chats/${chat.id}/users/${user.id}`, {
         method: 'PUT',

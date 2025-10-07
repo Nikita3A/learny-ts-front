@@ -6,8 +6,10 @@ import AIChat from '../components/AI/AIChat';
 
 const LessonPage = () => {
   const params = useParams();
-  const unitId = params.unitId ?? params.courseId ?? (params as any).course?.id;
-  const lessonId = params.lessonId ?? params.id;
+  console.log('Route params:', params);
+  
+  const unitId = params.unitId;
+  const lessonId = params.lessonId;
 
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [activeComponent, setActiveComponent] = useState<'content' | 'chat'>('content');
