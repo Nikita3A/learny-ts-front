@@ -57,10 +57,14 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
     setSelectedLesson(null);
   };
 
-  const handleLessonClick = (unitId, lesson) => {
-    navigate(`/unit/${unitId}/lessons/${lesson.id}`);
+  const handleLessonClick = (unitId: number, lessonId: number) => {
+    navigate(`/unit/${unitId}/lessons/${lessonId}`);
     // setSelectedLesson(lesson);
   };
+
+  const handleTestClick = (courseId: number, lessonId: number) => {
+    navigate(`/course/${courseId}/lessons/${lessonId}`);
+  }
 
   // ... rest of your methods (handleTestClick, handleTestFinish) ...
 
@@ -114,7 +118,7 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
                             <div
                               key={lesson.id}
                               className={`flex items-center p-2 rounded-md ${lessonIndex === section.lessons.length - 1 ? '' : 'mb-2'} hover:bg-mediumGray transition-colors duration-200`}
-                              onClick={() => handleLessonClick(section.id, lesson)}
+                              onClick={() => handleLessonClick(section.id, lesson.id)}
                             >
                               <p className={`text-md flex-1 cursor-pointer ${lesson.finished ? 'text-green' : 'text-white'}`}>
                                 {lesson.title}
@@ -123,7 +127,7 @@ const CoursePlan = ({ courseId, selectedLesson, setSelectedLesson }) => {
                                 className="cursor-pointer p-1 rounded-full hover:bg-opacity-50 transition-colors duration-200"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleTestClick(lesson.id);
+                                  handleTestClick(courseId, lesson.id);
                                 }}
                               >
                                 <img

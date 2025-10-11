@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const QuestionType1 = ({ question, options, correctAnswer, onNext }) => {
+const QuestionType1 = ({ question='Question', options=['Option 1', 'Option 2', 'Option 3'], correctAnswer, onNext }) => {
   const [selected, setSelected] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
 
