@@ -27,7 +27,7 @@ const useQuestions = (lessonId: number) => {
     loadQuestions();
   }, [currentUser]);
 
-  return { questions };
+  return  questions;
 };
 
 export default useQuestions;
