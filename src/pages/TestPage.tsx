@@ -5,12 +5,20 @@ import QuestionType3 from '../components/Questions/QuestionType3';
 import { useParams } from 'react-router-dom';
 import useQuestions from '../hooks/useQuestions';
 import useGenerateTests from '../hooks/useGenerateTests';
+import ProgressBar from '../components/Questions/ProgressBar';
 
 const TestPage = () => {
   const { lessonId } = useParams();
   const { questions } = useQuestions(Number(lessonId));
   const { generateTests, isGenerating } = useGenerateTests(Number(lessonId));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+
+  const handleSelectAnswer = (option: string, correctAnswer: string) => {
+    setSelectedAnswer(option);
+    setIsAnswerCorrect(option === correctAnswer);
+  };
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
@@ -30,11 +38,11 @@ const TestPage = () => {
     return <div>Creating test questions...</div>;
   }
 
-  console.log('Questions:', questions);
+  // console.log('Questions:', questions);
 
   return (
     <div>
-      {console.log('Questions length:', questions?.length)}
+      {/* {console.log('Questions length:', questions?.length)} */}
 
       {!questions || questions.length === 0 ? (
         <div>No questions available.</div>
@@ -54,13 +62,18 @@ const TestPage = () => {
               </div>
             ))}
           </div>
+          {/* <ProgressBar currentQuestionIndex={currentQuestionIndex} totalQuestions={questions.length} /> */}
           {questions[currentQuestionIndex].type === 'single' ? (
+            // console.log('asnwer page', questions[currentQuestionIndex].correctAnswer),
             <QuestionType1
               key={currentQuestionIndex}
+              selected={selectedAnswer}
               question={questions[currentQuestionIndex].questionText}
               options={questions[currentQuestionIndex].options}
               correctAnswer={questions[currentQuestionIndex].correctAnswer}
               onNext={handleNextQuestion}
+              isAnswerCorrect={isAnswerCorrect}
+              handleSelect={handleSelectAnswer}
             />
           ) : (
             <QuestionType2
@@ -71,7 +84,7 @@ const TestPage = () => {
               onNext={handleNextQuestion}
             />
           )}
-          <button className="bg-green text-white p-2 rounded-lg w-full" onClick={handleNextQuestion}>
+          <button className="bg-green text-white p-2 rounded-lg" onClick={handleNextQuestion}>
             Next
           </button>
         </div>

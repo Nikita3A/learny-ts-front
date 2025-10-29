@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
 
-const QuestionType1 = ({ question='Question', options=['Option 1', 'Option 2', 'Option 3'], correctAnswer='Option 1', onNext }) => {
-  const [selected, setSelected] = useState(null);
-  const [isCorrect, setIsCorrect] = useState(null);
+const QuestionType1 = ({
+  selected = null,
+  isCorrect = null,
+  question = 'Question',
+  options = ['Option 1', 'Option 2', 'Option 3'],
+  correctAnswer = 'Option 1',
+  onNext,
+  isAnswerCorrect,
+  handleSelect = () => {},
+}) => {
+  // const [selected, setSelected] = useState(null);
+  // const [isCorrect, setIsCorrect] = useState(null);
 
-  const handleSelect = (option) => {
-    setSelected(option);
-    setIsCorrect(option === correctAnswer);
-  };
+  // const handleSelect = (index, option, correctAnswer) => {
+  //   console.log('index: ', index, 'option: ', option);
+  //   console.log('cra: ' correctAnswer);
+
+  //   setSelected(option);
+  //   setIsCorrect(option === correctAnswer);
+  // };
 
   return (
     <div className="p-4 w-full bg-dark text-white rounded-lg">
@@ -18,21 +30,21 @@ const QuestionType1 = ({ question='Question', options=['Option 1', 'Option 2', '
             <button
               className={`p-2 rounded-lg w-full text-left transition-colors duration-300 ${
                 selected === option
-                  ? isCorrect
+                  ? isAnswerCorrect
                     ? 'bg-green hover:bg-green'
                     : 'bg-red hover:bg-red'
                   : 'bg-darkGray hover:bg-mediumGray'
               }`}
-              onClick={() => handleSelect(option)}
+              onClick={() => handleSelect(option, correctAnswer)}
             >
               {option}
             </button>
           </div>
         ))}
       </div>
-      {isCorrect !== null && (
-        <div className={`mt-4 ${isCorrect ? 'text-green' : 'text-red'}`}>
-          {isCorrect ? 'Correct!' : 'Incorrect!'}
+      {isAnswerCorrect !== null && (
+        <div className={`mt-4 ${isAnswerCorrect ? 'text-green' : 'text-red'}`}>
+          {isAnswerCorrect ? 'Correct!' : 'Incorrect!'}
         </div>
       )}
     </div>
