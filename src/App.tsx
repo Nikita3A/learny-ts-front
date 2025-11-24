@@ -10,6 +10,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import './App.css';
 import CourseCreationPage from "./pages/CourseCreationPage";
 import LessonPage from "./pages/LessonPage";
+import TestPage from "./pages/TestPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "unit/:unitId/lessons/:lessonId",
         element: <LessonPage />
+      },
+      {
+        path: "course/:courseId/lessons/:lessonId",
+        element: <TestPage/>
       },
       // { path: "courses", element: <CoursesPage /> },
       // { path: "courses/:courseId", element: <CoursesPage /> },
