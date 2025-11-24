@@ -10,33 +10,43 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = ({ total, currentIndex, statuses, onJump }: ProgressBarProps) => {
+  const answeredCount = statuses.filter((s) => s !== 'unanswered').length;
+
   return (
-    <div className="flex items-center gap-2" role="list" aria-label="Question progress">
-      {Array.from({ length: total }).map((_, i) => {
-        const status = statuses[i] ?? 'unanswered';
-        const base = 'w-8 h-6 rounded flex items-center justify-center text-xs cursor-pointer';
-        const cls =
-          i === currentIndex
-            ? `${base} ring-2 ring-green`
-            : status === 'correct'
-              ? `${base} bg-green`
-              : status === 'wrong'
-                ? `${base} bg-red`
-                : `${base} bg-gray-600`;
-        return (
-          <button
-            key={i}
-            className={cls}
-            onClick={() => onJump?.(i)}
-            aria-current={i === currentIndex ? 'step' : undefined}
-            aria-label={`Question ${i + 1} ${status}`}
-          >
-            {i + 1}
-          </button>
-        );
-      })}
-      <div className="ml-auto text-sm text-gray-300">
-        {statuses.filter((s) => s !== 'unanswered').length}/{total} answered
+    <div className="w-full">
+      {/* Start-aligned on small screens so initial view shows question 1,
+          center on md+ when the row fits */}
+      <div className="overflow-x-auto no-scrollbar px-2 flex items-stretch md:justify-center">
+        <div className="inline-flex gap-3 py-2 w-max">
+          {Array.from({ length: total }).map((_, i) => {
+            const status = statuses[i] ?? 'unanswered';
+            const base = 'flex items-center justify-center rounded-md text-base cursor-pointer select-none';
+            const sizeCls = 'w-8 h-8 md:w-8 md:h-8 lg:w-8 lg:h-8';
+            const cls =
+              i === currentIndex
+                ? `${base} ${sizeCls} ring-3 ring-green`
+                : status === 'correct'
+                  ? `${base} ${sizeCls} bg-green text-white`
+                  : status === 'wrong'
+                    ? `${base} ${sizeCls} bg-red text-white`
+                    : `${base} ${sizeCls} bg-darkGray text-white/90`;
+            return (
+              <button
+                key={i}
+                className={cls}
+                onClick={() => onJump?.(i)}
+                aria-current={i === currentIndex ? 'step' : undefined}
+                aria-label={`Question ${i + 1} ${status}`}
+              >
+                <span className="font-semibold text-sm md:text-base lg:text-lg">{i + 1}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3 text-center text-sm text-gray-300">
+        <span className="font-medium">{answeredCount}</span>/<span className="text-white/70">{total}</span> answered
       </div>
     </div>
   );
