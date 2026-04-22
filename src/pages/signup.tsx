@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useDispatch } from "react-redux";
-import { loginFailed, loginStart, loginSuccess } from "../../redux/userSlice";
+import { useDispatch } from 'react-redux';
+import { loginFailed, loginStart, loginSuccess } from '../redux/userSlice';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,33 +17,35 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
       return;
     }
     dispatch(loginStart());
     try {
       const response = await fetch('/api/auth/signup', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, username, password }),
       });
-  
+
       const data = await response.json();
-      
+
       dispatch(loginSuccess(data));
-      navigate("/signin");
+      navigate('/signin');
     } catch (err) {
       console.error(err);
       dispatch(loginFailed());
     }
   };
-  
+
   return (
     <div className="h-screen bg-dark flex justify-center items-center">
       <div className="w-full max-w-md overflow-hidden rounded-2xl bg-darkGray flex flex-col">
-        <div className="p-6 sm:p-8"> {/* padding for desktop, content height for mobile */}
+        <div className="p-6 sm:p-8">
+          {' '}
+          {/* padding for desktop, content height for mobile */}
           <h2 className="text-white text-2xl font-bold text-center mb-4">Learny</h2>
           <form className="flex flex-col">
             <div className="mb-2 sm:mb-4">
@@ -79,7 +81,10 @@ const Signup = () => {
               />
             </div>
             <div className="mb-2 sm:mb-4">
-              <button onClick={handleSignup} className="w-full p-3 bg-green text-white rounded-2xl hover:bg-green-dark focus:outline-none">
+              <button
+                onClick={handleSignup}
+                className="w-full p-3 bg-green text-white rounded-2xl hover:bg-green-dark focus:outline-none"
+              >
                 Signup
               </button>
             </div>
@@ -89,7 +94,9 @@ const Signup = () => {
                 Signup with Google
               </button>
             </div>
-            <a className="text-center text-green text-decoration-line: underline" href="/signin">Do you already have an account?</a>
+            <a className="text-center text-green text-decoration-line: underline" href="/signin">
+              Do you already have an account?
+            </a>
           </form>
         </div>
       </div>

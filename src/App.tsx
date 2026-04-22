@@ -1,59 +1,66 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ChatsPage from './pages/ChatsPage';
 import CoursesPage from './pages/CoursesPage';
 import ProfilePage from './pages/ProfilePage';
 import AIChatPage from './pages/AIChatPage';
 import SharedLayout from './components/SharedLayout';
-import Signin from "./pages/signin/signin";
-import Signup from "./pages/signup/signup";
-import PrivateRoute from "./components/PrivateRoute";
+import Signin from './pages/signin';
+import Signup from './pages/signup';
+// import PrivateRoute from './components/PrivateRoute';
 import './App.css';
-import CourseCreationPage from "./pages/CourseCreationPage";
-import LessonPage from "./pages/LessonPage";
-import TestPage from "./pages/TestPage";
+import CourseCreationPage from './pages/CourseCreationPage';
+import LessonPage from './pages/LessonPage';
+import TestPage from './pages/TestPage';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <SharedLayout />,
     children: [
-      { 
-        path: "chats", 
+      {
+        path: 'chats',
         element: <ChatsPage />,
       },
-      { 
-        path: "chats/:chatId", 
+      {
+        path: 'chats/:chatId',
         element: <ChatsPage />, // Use the same page for both
       },
       {
-        path: "courses/create",
-        element: <CourseCreationPage />
+        path: 'courses/create',
+        element: <CourseCreationPage />,
       },
       {
-        path: "courses",
+        path: 'courses',
         element: <CoursesPage />,
-        children: [  // Add nested route for course details
+        children: [
+          // Add nested route for course details
           {
-            path: ":courseId",  // This matches the courseId in the URL
-            element: null  // We'll handle this differently
-          }
-        ]
+            path: ':courseId', // This matches the courseId in the URL
+            element: null, // We'll handle this differently
+          },
+        ],
       },
       {
-        path: "unit/:unitId/lessons/:lessonId",
-        element: <LessonPage />
+        path: 'unit/:unitId/lessons/:lessonId',
+        element: <LessonPage />,
       },
       {
-        path: "course/:courseId/lessons/:lessonId",
-        element: <TestPage/>
+        path: 'course/:courseId/lessons/:lessonId',
+        element: <TestPage />,
       },
       // { path: "courses", element: <CoursesPage /> },
       // { path: "courses/:courseId", element: <CoursesPage /> },
-      { path: "profile", element: <ProfilePage /> },
-      { path: "ai", element: <AIChatPage /> },
-      { path: "signin", element: <Signin /> },
-      { path: "signup", element: <Signup /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'ai', element: <AIChatPage /> },
     ],
+  },
+  {
+    path: 'signin',
+    element: <Signin />,
+  },
+  {
+    path: 'signup',
+    element: <Signup />,
   },
 ]);
 

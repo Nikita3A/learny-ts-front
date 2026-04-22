@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import { loginFailed, loginStart, loginSuccess } from "../../redux/userSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginFailed, loginStart, loginSuccess } from '../redux/userSlice';
 
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 const Signin = () => {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const currentUser = useSelector(state => state.user.currentUser);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,22 +18,20 @@ const Signin = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const response = await fetch("/api/auth/signin", { 
-        method: "POST",
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email, password })
+        body: JSON.stringify({ email, password }),
       });
-      
+
       const { accessToken, refreshToken } = await response.json();
       const { user } = jwtDecode(accessToken);
-      
-      dispatch(loginSuccess({user, accessToken, refreshToken}))
 
+      dispatch(loginSuccess({ user, accessToken, refreshToken }));
 
-      navigate("/courses");
-
+      navigate('/courses');
     } catch (err) {
       console.log('e:', err);
       dispatch(loginFailed());
@@ -64,7 +61,10 @@ const Signin = () => {
               />
             </div>
             <div className="mb-2 sm:mb-4">
-              <button onClick={handleSignin} className="w-full p-3 bg-green text-white rounded-2xl hover:bg-green-dark focus:outline-none">
+              <button
+                onClick={handleSignin}
+                className="w-full p-3 bg-green text-white rounded-2xl hover:bg-green-dark focus:outline-none"
+              >
                 Signin
               </button>
             </div>
@@ -74,14 +74,14 @@ const Signin = () => {
                 Signin with Google
               </button>
             </div>
-            <a className="text-center text-green text-decoration-line: underline" href="/">Don't have an account?</a>
+            <a className="text-center text-green text-decoration-line: underline" href="/">
+              Don't have an account?
+            </a>
           </form>
         </div>
       </div>
     </div>
   );
-  
-  
 };
 
 export default Signin;
